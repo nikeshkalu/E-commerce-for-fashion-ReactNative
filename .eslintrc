@@ -1,4 +1,3 @@
 { 
-    "extends": "react-native-wcandillon"
-  } 
-  
+  "extends": "react-app"
+} 
