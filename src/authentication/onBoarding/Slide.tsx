@@ -36,7 +36,7 @@ const Slide = ({label,right} : SlideProps) => {
             { rotate : right ? "-90deg" : "90deg"}
     ];
   return (
-    <View style = {styles.container}>
+    <View style = {styles.container} >
         <View style = {[styles.titleContainer,{ transform }]}>
             <Text style={styles.title}>{label}</Text>
         </View>

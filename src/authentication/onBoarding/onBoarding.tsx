@@ -1,10 +1,11 @@
 import React from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
 // import { ScrollView } from "react-native-gesture-handler";
-// import {useValue,onScrollEvent} from "react-native-redash"
-import Animated from 'react-native-reanimated'
+// import {useValue,onScrollEvent,useSpring} from "react-native-redash"
+import { useValue,interpolateColor,onScrollEvent } from "react-native-redash/lib/module/v1"
+import Animated, { multiply } from 'react-native-reanimated';
 import Slide,{SLIDER_HEIGHT} from './Slide'
-
+import SubSlide from './SubSlide'
 
 const { width} = Dimensions.get("window")
 
@@ -15,38 +16,70 @@ const styles = StyleSheet.create({
   },
   slider: {
     height: SLIDER_HEIGHT,
-    backgroundColor : "cyan",
     borderBottomRightRadius : 75
   },
   footer: {
     flex: 1,
   },
+  footerContent : {
+    flex:1,
+    flexDirection:"row",
+    backgroundColor: "white",
+    borderTopLeftRadius:75
+  }
 });
 
+const slides = [
+  { title:"Relaxed",subtitle:"Find your outfit",description:"The best outfit in the town.",color:"#BFEAF5" },
+  { title:"Playful",subtitle:"Hear it is wear it first",description:"Dummpy value",color:"#BEECC4" },
+  { title:"Excentric",subtitle:"Your style your way",description:"Random content.",color:"#FFE4D9" },
+  { title:"Funky",subtitle:"Look good, Feel Good",description:"Best clothes to look good",color:"#FFDDDD" },
+]
+
 const onBoarding = () => {
-  // const x = useValues(0);
-  // const onScroll = onScrollEvent({ x })
+  const x = useValue(0);
+  const onScroll = onScrollEvent({ x })
+
+  const backgroundColor = interpolateColor(x, {
+    inputRange: slides.map((_,i)=>i * width),
+    outputRange: slides.map((slide)=>slide.color),
+  });
+
+  
   return (
     <View style={styles.container}>
-      <View style={styles.slider}>
+      <Animated.View style={[styles.slider , { backgroundColor} ] }>
         <Animated.ScrollView 
           horizontal 
           snapToInterval={width}
           decelerationRate="fast"
           showsHorizontalScrollIndicator={false}
           bounces={false}
-          // {...{ onScroll }}
+          scrollEventThrottle={1}
+          {...{ onScroll }}
           >
-          <Slide label="Relaxed" />
-          <Slide label="Painful" right/>
-          <Slide label="Excentric"/>
-          <Slide label="Funky" right/>
+          {
+            slides.map((slide,index)=>(
+              <Slide key={index} right={!!(index%2)} label={slide.title}></Slide>
+            ))
+          }
+          
         </Animated.ScrollView>
-      </View>
+      </Animated.View>
       <View style={styles.footer}>
-        <View
-          style={{...StyleSheet.absoluteFillObject,backgroundColor: "cyan"}}/>
-          <View style={{flex:1,backgroundColor: "white",borderTopLeftRadius:75}}></View>
+        <Animated.View
+          style={{...StyleSheet.absoluteFillObject,backgroundColor}}/>
+          <Animated.View style={[
+            styles.footerContent,
+            {
+              width : width * slides.length,
+              flex:1,
+              transform : [{translateX:multiply(x,-1)}]
+              }]}>
+            {slides.map(({subtitle,description},index)=>(
+              <SubSlide key={index} last={index === slides.length-1} {...{subtitle,description}}/>
+            ))}
+          </Animated.View>
         </View>
     </View>
   );
