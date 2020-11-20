@@ -31,17 +31,20 @@ const styles = StyleSheet.create({
 interface SubSlideProps {
     description : string,
     subtitle : string,
-    last?:boolean
+    last?:boolean,
+    onPress : () => void
 }
 
-const SubSlide = ({subtitle,description,last} : SubSlideProps) => {
+const SubSlide = ({subtitle,description,last,onPress} : SubSlideProps) => {
    
   return (
     <View style = {styles.container} >
             <Text style={styles.subTitle}>{subtitle}</Text>
             <Text style={styles.description}>{description}</Text>
             <Button
-            label={last?"Let's get Started":"Next"} variant={last?"primary":"default"}/>
+            label={last?"Let's get Started":"Next"} 
+            variant={last?"primary":"default"}
+            {...{onPress}}/>
     </View>
   );
 };

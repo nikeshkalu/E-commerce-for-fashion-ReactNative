@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
 // import { ScrollView } from "react-native-gesture-handler";
 // import {useValue,onScrollEvent,useSpring} from "react-native-redash"
@@ -37,6 +37,7 @@ const slides = [
 ]
 
 const onBoarding = () => {
+  const scroll = useRef<Animated.ScrollView>(null)
   const x = useValue(0);
   const onScroll = onScrollEvent({ x })
 
@@ -50,7 +51,8 @@ const onBoarding = () => {
     <View style={styles.container}>
       <Animated.View style={[styles.slider , { backgroundColor} ] }>
         <Animated.ScrollView 
-          horizontal 
+          horizontal
+          ref = {scroll} 
           snapToInterval={width}
           decelerationRate="fast"
           showsHorizontalScrollIndicator={false}
@@ -75,9 +77,18 @@ const onBoarding = () => {
               width : width * slides.length,
               flex:1,
               transform : [{translateX:multiply(x,-1)}]
-              }]}>
+              }
+            ]}>
             {slides.map(({subtitle,description},index)=>(
-              <SubSlide key={index} last={index === slides.length-1} {...{subtitle,description}}/>
+              <SubSlide 
+              key={index}
+              onPress = {()=>{
+                if(scroll.current){
+                  scroll.current.getNode().scrollTo({x:width*(index+1),animated : true})
+                }
+              }}
+              last={index === slides.length-1}
+              {...{subtitle,description}}/>
             ))}
           </Animated.View>
         </View>
