@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, Text ,Dimensions} from "react-native";
+import { View, StyleSheet, Text ,Dimensions, Image} from "react-native";
 
 const {width,height} = Dimensions.get("window")
 
@@ -9,6 +9,16 @@ const styles = StyleSheet.create({
     container: {
         width, 
       },
+      underlay :{
+        ...StyleSheet.absoluteFillObject,
+        justifyContent : "flex-end",
+    } ,
+    image : {
+        ...StyleSheet.absoluteFillObject,
+        height:undefined,
+        width : undefined,
+        borderBottomRightRadius : 75
+    },  
     titleContainer : {
         height : 100,
         justifyContent : "center",
@@ -20,16 +30,18 @@ const styles = StyleSheet.create({
          fontFamily : "SFProText-Bold",
          color : "white",
          textAlign : "center"
-     } 
+     },
+     
      
 });
 
 interface SlideProps {
     label : string,
-    right?: boolean
+    right?: boolean,
+    image : number
 }
 
-const Slide = ({label,right} : SlideProps) => {
+const Slide = ({label,right,image} : SlideProps) => {
     const transform = [
             { translateY : (SLIDER_HEIGHT-100)/2 },
             { translateX : right ? width /2 -50 : -width /2 + 50},
@@ -37,6 +49,9 @@ const Slide = ({label,right} : SlideProps) => {
     ];
   return (
     <View style = {styles.container} >
+        <View style={styles.underlay}>
+            <Image source={image} style={styles.image}></Image>
+        </View>
         <View style = {[styles.titleContainer,{ transform }]}>
             <Text style={styles.title}>{label}</Text>
         </View>

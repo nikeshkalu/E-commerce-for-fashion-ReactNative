@@ -37,17 +37,15 @@ const styles = StyleSheet.create({
 });
 
 const slides = [
-  { title:"Relaxed",subtitle:"Find your outfit",description:"The best outfit in the town.",color:"#BFEAF5" },
-  { title:"Playful",subtitle:"Hear it is wear it first",description:"Dummpy value",color:"#BEECC4" },
-  { title:"Excentric",subtitle:"Your style your way",description:"Random content.",color:"#FFE4D9" },
-  { title:"Funky",subtitle:"Look good, Feel Good",description:"Best clothes to look good",color:"#FFDDDD" },
+  { title:"Relaxed",subtitle:"Find your outfit",description:"The best outfit in the town.",color:"#BFEAF5",image : require('./assets/1.png') },
+  { title:"Playful",subtitle:"Hear it is wear it first",description:"Dummpy value",color:"#BEECC4",image : require('./assets/2.png') },
+  { title:"Excentric",subtitle:"Your style your way",description:"Random content.",color:"#FFE4D9",image : require('./assets/3.png') },
+  { title:"Funky",subtitle:"Look good, Feel Good",description:"Best clothes to look good",color:"#FFDDDD",image : require('./assets/4.png') },
 ]
 
 const onBoarding = () => {
   const scroll = useRef<Animated.ScrollView>(null)
-  // const x = useValue(0);
   const {scrollHandler,x} = useScrollHandler()
-  // const onScroll = onScrollEvent({ x })
 
   const backgroundColor = interpolateColor(x, {
     inputRange: slides.map((_,i)=>i * width),
@@ -70,7 +68,7 @@ const onBoarding = () => {
           >
           {
             slides.map((slide,index)=>(
-              <Slide key={index} right={!!(index%2)} label={slide.title}></Slide>
+              <Slide key={index} right={!!(index%2)} label={slide.title} image={slide.image}></Slide>
             ))
           }
           
