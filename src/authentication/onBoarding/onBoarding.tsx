@@ -1,11 +1,12 @@
 import React, { useRef } from "react";
-import { View, StyleSheet, Dimensions } from "react-native";
+import { View, StyleSheet, Dimensions, Text } from "react-native";
 // import { ScrollView } from "react-native-gesture-handler";
 // import {useValue,onScrollEvent,useSpring} from "react-native-redash"
-import { useValue,interpolateColor,onScrollEvent } from "react-native-redash/lib/module/v1"
-import Animated, { multiply } from 'react-native-reanimated';
+import { useValue,interpolateColor,onScrollEvent,useScrollHandler } from "react-native-redash/lib/module/v1"
+import Animated, { multiply, divide } from 'react-native-reanimated';
 import Slide,{SLIDER_HEIGHT} from './Slide'
 import SubSlide from './SubSlide'
+import Dot from './Dot'
 
 const { width} = Dimensions.get("window")
 
@@ -23,9 +24,15 @@ const styles = StyleSheet.create({
   },
   footerContent : {
     flex:1,
-    flexDirection:"row",
     backgroundColor: "white",
     borderTopLeftRadius:75
+  },
+  pagination:{
+    ...StyleSheet.absoluteFillObject,
+    height : 75,
+    justifyContent : "center",
+    alignItems : "center",
+    flexDirection : "row"
   }
 });
 
@@ -38,8 +45,9 @@ const slides = [
 
 const onBoarding = () => {
   const scroll = useRef<Animated.ScrollView>(null)
-  const x = useValue(0);
-  const onScroll = onScrollEvent({ x })
+  // const x = useValue(0);
+  const {scrollHandler,x} = useScrollHandler()
+  // const onScroll = onScrollEvent({ x })
 
   const backgroundColor = interpolateColor(x, {
     inputRange: slides.map((_,i)=>i * width),
@@ -57,8 +65,8 @@ const onBoarding = () => {
           decelerationRate="fast"
           showsHorizontalScrollIndicator={false}
           bounces={false}
-          scrollEventThrottle={1}
-          {...{ onScroll }}
+          // scrollEventThrottle={1}
+          {...scrollHandler}
           >
           {
             slides.map((slide,index)=>(
@@ -68,17 +76,32 @@ const onBoarding = () => {
           
         </Animated.ScrollView>
       </Animated.View>
+
       <View style={styles.footer}>
+
         <Animated.View
           style={{...StyleSheet.absoluteFillObject,backgroundColor}}/>
-          <Animated.View style={[
-            styles.footerContent,
+
+        <View style={styles.footerContent}>
+        <View style={styles.pagination}>
+                  {slides.map((_,index)=>(
+                    <Dot 
+                      key={index}
+                      currentIndex = {divide(x,width)}
+                      {...{index}}/>
+                  ))}
+              </View>
+
+          <Animated.View style={ 
             {
               width : width * slides.length,
               flex:1,
-              transform : [{translateX:multiply(x,-1)}]
+              transform : [{translateX:multiply(x,-1)}],
+              flexDirection : "row"
               }
-            ]}>
+            }>
+
+             
             {slides.map(({subtitle,description},index)=>(
               <SubSlide 
               key={index}
@@ -90,7 +113,9 @@ const onBoarding = () => {
               last={index === slides.length-1}
               {...{subtitle,description}}/>
             ))}
+
           </Animated.View>
+          </View>
         </View>
     </View>
   );
