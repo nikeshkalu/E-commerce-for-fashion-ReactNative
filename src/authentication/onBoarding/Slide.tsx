@@ -15,8 +15,13 @@ const styles = StyleSheet.create({
     } ,
     image : {
         ...StyleSheet.absoluteFillObject,
-        height:undefined,
+        height: undefined,
         width : undefined,
+        alignItems : "center",
+        justifyContent: 'center',
+        resizeMode: 'contain',
+        // marginTop: 10,
+        // marginBottom: 10,    
         borderBottomRightRadius : 75
     },  
     titleContainer : {
@@ -49,7 +54,7 @@ const Slide = ({label,right,image} : SlideProps) => {
     ];
   return (
     <View style = {styles.container} >
-        <View style={styles.underlay}>
+        <View style={styles.underlay}>      
             <Image source={image} style={styles.image}></Image>
         </View>
         <View style = {[styles.titleContainer,{ transform }]}>
