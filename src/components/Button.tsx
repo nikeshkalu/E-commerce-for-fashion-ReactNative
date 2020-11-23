@@ -1,6 +1,7 @@
 import React from "react";
 import { View, StyleSheet, Text ,Dimensions} from "react-native";
 import {RectButton} from 'react-native-gesture-handler'
+import theme from "./theme";
 
 const styles = StyleSheet.create({
     container: {
@@ -21,15 +22,15 @@ const styles = StyleSheet.create({
 
 interface ButtonProps {
     label : string,
-    variant : "default" | "primary",
+    variant : "default" | "primary" | "transparent",
     onPress : () => void
     
 }
 
 const Button = ({label,variant,onPress} : ButtonProps) => {
 
-  const backgroundColor = variant === "primary" ? "#2CB9B0" : "rgba(12,13,52,0.05)"
-  const color = variant === "primary" ? "white" : "#0C0D34"
+  const backgroundColor = variant === "primary" ? theme.colors.primary : variant === "transparent"?"transparent":"rgba(12,13,52,0.05)"
+  const color = variant === "primary" ? theme.colors.white : theme.colors.button
    
   return (
     <RectButton style={[styles.container,{ backgroundColor }]} {...{onPress}}>

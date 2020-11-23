@@ -7,6 +7,7 @@ import Animated, { multiply, divide } from 'react-native-reanimated';
 import Slide,{SLIDER_HEIGHT} from './Slide'
 import SubSlide from './SubSlide'
 import Dot from './Dot'
+import { StackNavigationProps, Routes } from "../../components/Navigation";
 
 const { width} = Dimensions.get("window")
 
@@ -43,7 +44,7 @@ const slides = [
   { title:"Funky",subtitle:"Look good, Feel Good",description:"Best clothes to look good",color:"#FFDDDD",image : require('./assets/4.png') },
 ]
 
-const onBoarding = () => {
+const onBoarding = ({navigation} : StackNavigationProps<Routes,"onBoarding">) => {
   const scroll = useRef<Animated.ScrollView>(null)
   const {scrollHandler,x} = useScrollHandler()
 
@@ -67,9 +68,12 @@ const onBoarding = () => {
           {...scrollHandler}
           >
           {
-            slides.map((slide,index)=>(
-              <Slide key={index} right={!!(index%2)} label={slide.title} image={slide.image}></Slide>
-            ))
+            slides.map((slide,index)=>{
+              return(
+                <Slide key={index} right={!!(index%2)} label={slide.title} image={slide.image}></Slide>
+              )
+              
+            })
           }
           
         </Animated.ScrollView>
@@ -100,17 +104,26 @@ const onBoarding = () => {
             }>
 
              
-            {slides.map(({subtitle,description},index)=>(
-              <SubSlide 
-              key={index}
-              onPress = {()=>{
-                if(scroll.current){
-                  scroll.current.getNode().scrollTo({x:width*(index+1),animated : true})
-                }
-              }}
-              last={index === slides.length-1}
-              {...{subtitle,description}}/>
-            ))}
+            {slides.map(({subtitle,description},index)=>{
+              const last=index === slides.length-1;
+              return(
+                <SubSlide 
+                key={index}
+                onPress = {()=>{
+                  if(last){
+                    navigation.navigate("Welcome")
+                  }
+                  if(scroll.current){
+                    scroll.current.getNode().scrollTo({x:width*(index+1),animated : true})
+                  }
+                }}
+                last={index === slides.length-1}
+                {...{subtitle,description,last}}/>
+              )
+            
+             
+            }
+             )}
 
           </Animated.View>
           </View>
