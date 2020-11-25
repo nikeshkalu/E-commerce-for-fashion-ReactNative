@@ -7,6 +7,7 @@ import {ThemeProvider} from '@shopify/restyle';
 import { onBoarding,Welcome } from "./src/authentication";
 import { LoadAssets,theme } from "./src/components";
 import { Routes } from "./src/components/Navigation";
+import { Login } from "./src/authentication/Login";
 
 const fonts = {
   "SFProText-Bold": require("./assets/fonts/SF-Pro-Text-Bold.otf"),
@@ -21,6 +22,7 @@ const AuthenticationNavigator = () => {
     <AuthenticationStack.Navigator headerMode="none">
       <AuthenticationStack.Screen name="onBoarding" component={onBoarding} />
       <AuthenticationStack.Screen name="Welcome" component={Welcome} />
+      <AuthenticationStack.Screen name="Login" component={Login} />
     </AuthenticationStack.Navigator>
   );
 };

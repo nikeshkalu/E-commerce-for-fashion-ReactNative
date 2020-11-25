@@ -3,6 +3,7 @@ import { View, StyleSheet, Image } from "react-native";
 // import Animated, { interpolate, Extrapolate } from "react-native-reanimated";
 import { Box,Text } from "../../components/theme";
 import { Button } from "../../components";
+import { StackNavigationProps, Routes } from "../../components/Navigation";
 
 
 // interface DotProps {
@@ -10,7 +11,7 @@ import { Button } from "../../components";
 //     currentIndex : Animated.Node<number>
 // }
 
-const Welcome = () => {
+const Welcome = ({navigation} : StackNavigationProps<Routes,"Welcome">) => {
    
 
   return (
@@ -32,7 +33,9 @@ const Welcome = () => {
           <Text variant="title2">Let's get Started</Text>
           <Text variant="body" textAlign="center">Login to account  or signUp for amazing shoping experience</Text>
           
-          <Button variant="primary" label="Have an Account?Login" onPress={()=>{}}></Button>
+          <Button variant="primary" label="Have an Account?Login" onPress={()=>{
+            navigation.navigate('Login')
+          }}></Button>
           <Button label="Join us,Its free"  onPress={()=>{}}></Button>
           <Button variant="transparent" label="Forget Password?" onPress={()=>{}}></Button>
 
